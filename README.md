@@ -1,32 +1,23 @@
-# Pricing Elasticity & Revenue Yield Optimization Engine
+# Price Elasticity & Margin Yield Analysis
 
-An econometric pricing and yield management engine designed to estimate empirical price elasticity of demand ($\epsilon$), classify market sensitivity, and calculate margin-maximizing price points.
+An econometric pricing workflow using log-log regression to estimate SKU price elasticity of demand and evaluate margin-vs-volume trade-offs.
 
-## Overview
-Setting optimal product prices requires balancing sales volume velocity with gross profit contribution. Blind discount campaigns risk margin erosion, while arbitrary price hikes can crush unit sales. This project models price sensitivity across historical price-testing variations using log-log ordinary least squares (OLS) regression to pinpoint profit-maximizing equilibrium.
+## Problem Context
+Blanket discounting erodes gross margin on inelastic items, while uncalibrated price increases hurt volume on price-sensitive SKUs. This project estimates empirical elasticity coefficients from historical price changes and computes margin-optimal price points.
 
-## Project Structure
-- `price_volume_elasticity.sql`: Production SQL CTE pipeline computing week-over-week price deltas, demand velocity, and gross profit contributions.
-- `elasticity_revenue_engine.py`: Econometric model evaluating constant elasticity curves ($\ln(Q) = \alpha + \epsilon \cdot \ln(P)$) and optimal markups based on unit marginal cost.
-- `requirements.txt`: Python package dependencies.
+## Files
+- `price_volume_elasticity.sql`: Calculates week-over-week price changes, unit volume shifts, and gross profit contribution.
+- `elasticity_revenue_engine.py`: Fits log-log OLS demand curves (`ln(Q) = a + e * ln(P)`) and computes optimal markups over unit cost.
+- `requirements.txt`: Python dependencies.
 
-## Key Econometric Metrics
-1. **Elasticity Coefficient ($\epsilon$):** Quantifies percentage change in units demanded per 1% change in product pricing.
-   - **Elastic ($\epsilon < -1$):** Price cuts drive disproportionate volume gains.
-   - **Inelastic ($-1 < \epsilon < 0$):** Customers absorb price hikes with minimal volume decay, creating pricing power.
-2. **Profit-Maximizing Price ($P^*$):** Derived from marginal cost ($MC$) and elasticity:
-   $$P^* = MC \times \left(\frac{\epsilon}{1 + \epsilon}\right)$$
-3. **Margin-Volume Trade-off:** Simulates gross margin expansion scenarios across multi-tier SKU portfolios.
+## How It Works
+1. **Elasticity Estimation:** Measures percentage demand change per 1% price movement to separate elastic (`e < -1`) from inelastic SKUs.
+2. **Margin Equilibrium:** Uses unit marginal cost and elasticity to calculate profit-maximizing price points.
+3. **Scenario Simulation:** Compares gross profit impact across SKU tiers before rolling out price updates.
 
-## How to Run
+## Run Locally
 
-```bash
-# Clone the repository
-git clone https://github.com/puneetgoswami1/pricing-elasticity-yield-optimizer.git
-cd pricing-elasticity-yield-optimizer
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run pricing elasticity model
-python elasticity_revenue_engine.py
+    git clone https://github.com/puneetgoswami1/pricing-elasticity-yield-optimizer.git
+    cd pricing-elasticity-yield-optimizer
+    pip install -r requirements.txt
+    python elasticity_revenue_engine.py
